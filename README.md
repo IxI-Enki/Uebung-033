@@ -1,65 +1,5 @@
-===============================  
- work in progres - cheat sheet  
-  .MD -- *formatting* :  
-
-This text is ***really important***!  
-**fat-text**  
-*italic*  
-
-  # Header - big  
-  ...  
-  ###### Header - small   
-
----
-
-*LISTS*:  
-1. step one
-2. step two
-
-* Item one
-* Item two
-
-- First item
-- Second item
-- Third item
-    - Indented item
-    - Indented item
-- Fourth item
- 
-*CODE*:  
-`Inlinecode`  
-
-```
-Beispiel für 
-einen Codeblock.
-```
-
-*COMMENTS*:  
-> Blockzitate müssen mit einer  
-> Leerzeile beginnen  
-> und enden  
-
-> Nested code  
-> block :  
->> example  
-
-> #### ADVANCED EXAMPLE!  
->  
-> - Beautiful  
-> - Nested  
->  
->  *COMMENTS* are **very ***nice*** to read**.  
-
-
-*LINKS*:  
-![Optionaler Alternativtext, falls sich das Bild nicht laden lässt](http://www.sampleurl.com/logo.png)  
-[Text to show on a link](http://www.sampleurl.com)  
-[![Alt-Text](imageurl)](linkurl)  
-
-===============================
-
-# Uebung-020  --  ...
-
+# Uebung-033  --  Linear Motion
+<!--
 ## Lernziele:
 
 ## Aufgabenstellung:
@@ -74,12 +14,81 @@ einen Codeblock.
 
 
 
-
+-->
 -------------------------------
 # **SPOILER**
 
-## PAP-Designer:
+```c#
+using System;
+using System.Threading;
 
-## Visual Studio:
+namespace LinearMotion
+{
+  internal class Programm
+  {
+    static void Main()
+    {
+      /*  SET SCREEN  */
+      const int consoleWidth = 70;
+      const int consoleHeight = 30;
+      Console.SetWindowSize(consoleWidth, consoleHeight);
 
-## Ausgabe:
+      /*  VARIABLES  */
+      string userInput,
+             formattedDistance, formattedDistanceA, formattedDistanceB,
+             formattedTime;
+      int distance, time,
+          hours, minutes;
+      double speedCarA, speedCarB,
+             distanceInAMinuteA, distanceInAMinuteB, totalDistancePerMinute,
+             totalTimeRequired, meetingPoint, seconds;
+
+      /*  INPUT  */
+      Console.Write("\n               Begegnung zweier entgegenfahrender Autos               " +
+                    "\n======================================================================" +
+                    "\n Entfernung [Ganzzahl in km]: ");
+      userInput = Console.ReadLine();
+      int.TryParse(userInput, out distance);
+
+      Console.Write("\n Geschwindigkeit Fahrzeug A [Ganzzahl in km/h ]: ");
+      userInput = Console.ReadLine();
+      double.TryParse(userInput, out speedCarA);
+
+      Console.Write("\n Geschwindigkeit Fahrzeug B [Ganzzahl in km/h ]: ");
+      userInput = Console.ReadLine();
+      double.TryParse(userInput, out speedCarB);
+
+      /*  CALCULATE ONE MINUTE  */
+      distanceInAMinuteA = speedCarA / 60;
+      distanceInAMinuteB = speedCarB / 60;
+      totalDistancePerMinute = distanceInAMinuteA + distanceInAMinuteB;
+      totalTimeRequired = distance / totalDistancePerMinute;
+      Console.Write("----------------------------------------------------------------------");
+
+      for (time = 0; time < totalTimeRequired; time++)
+      {
+        formattedTime = time.ToString().PadLeft(4);
+        formattedDistanceA = (distanceInAMinuteA * time).ToString("0.00").PadLeft(6);
+        formattedDistanceB = (distance - distanceInAMinuteB * time).ToString("0.00").PadLeft(6);
+        formattedDistance = ((distance - distanceInAMinuteB * time) - (distanceInAMinuteA * time)).ToString("0.00").PadLeft(6);
+        /*  OUTPUT EVERY POSITION EVERY MINUTE  */
+        Console.Write($"\n Minute: {formattedTime}  Position A: {formattedDistanceA}  Position B: {formattedDistanceB}  Distanz: {formattedDistance} ");
+      }
+      /*  CALCULATE EXACT TRAVEL TIME  */
+      hours = (int)(totalTimeRequired / 60);
+      minutes = (int)(totalTimeRequired % 60);
+      seconds = (double)((totalTimeRequired % 1) * 60);
+      /*  CALCULATE MEETINGPOINT  */
+      meetingPoint = totalTimeRequired * distanceInAMinuteA;
+      /*  OUTPUT MEETING  */
+      Console.Write("\n----------------------------------------------------------------------" +
+                   $"\nTreffpunkt: {meetingPoint.ToString("0.00")} km nach {hours} Stunden, {minutes} Minuten, {seconds.ToString("0.00")} Sekunden");
+      Console.Write("\n======================================================================");
+      /*  END  */
+      Console.Write("\nZum Beenden bitte Eingabetaste drücken ...");
+      Console.ReadLine();
+      Console.Clear();
+    }
+  }
+}
+```
